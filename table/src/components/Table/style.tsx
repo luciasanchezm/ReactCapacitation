@@ -117,12 +117,9 @@ const useStyles = makeStyles(
 		autocomplete: {},
 		filterChip: {
 			marginRight: 4,
-			boxShadow: "0 2px 2px rgba(0, 0, 0, 0.2)",
 			transition: "all 0.2s",
 			animation: "bounce 0.3s",
-			backgroundColor: pink[300],
 			"&:hover": {
-				boxShadow: "0 3px 6px rgba(0, 0, 0, 0.3)",
 				transform: "translateY(-2px)",
 			},
 		},

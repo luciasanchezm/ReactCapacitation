@@ -28,12 +28,16 @@ const MaterialFilterTableView: React.FC<Props> = ({data, cols, fetching}) => {
 	var columns: Array<GridColDef> = useMemo(() => {
 		let arr: Array<GridColDef> = [];
 		for (let col of cols) {
+			const numberOfChipsByColumn = filters[col.field] ? filters[col.field].length : 0;
 			col.sortable = true;
 			col.hideSortIcons = true;
 			col.renderHeader = (params: GridColumnHeaderParams) => (
 				<Grid container className={classes.mainHeader}>
 					<Grid item xs={12}>
-						<Typography className={classes.tableHeader}>{col.headerName}</Typography>
+						<Typography className={classes.tableHeader}>
+							{col.headerName}
+							{numberOfChipsByColumn > 0 && ` (${numberOfChipsByColumn})`}
+						</Typography>
 					</Grid>
 					{col.field !== "" && (
 						<Grid item xs={12}>
@@ -127,6 +131,21 @@ const MaterialFilterTableView: React.FC<Props> = ({data, cols, fetching}) => {
 		);
 	};
 
+	// Botón para eliminar un Chip
+	const deleteChip = (f: string, index: number) => {
+		let newFilters = {...filters};
+		// En el caso de que nomás quede un elemento, se elimina la columna completa
+		if (newFilters[f].length === 1) {
+			delete newFilters[f];
+			return setFilters(newFilters);
+		}
+		// Se elimina el elemento seleccionado mediante el índice
+		newFilters[f].splice(index, 1);
+
+		// Se actualiza el objeto filters
+		setFilters(newFilters);
+	};
+
 	const StringifyFilters = () => {
 		let keys = Object.keys(filters);
 		if (keys.length > 0) {
@@ -135,21 +154,11 @@ const MaterialFilterTableView: React.FC<Props> = ({data, cols, fetching}) => {
 					return (
 						<Chip
 							key={item}
+							variant='outlined'
 							className={classes.filterChip}
+							onDelete={() => deleteChip(f, index)}
 							color='primary'
-							onClick={() => {
-								let newFilters = {...filters};
-								// En el caso de que nomás quede un elemento, se elimina la columna completa
-								if (newFilters[f].length === 1) {
-									delete newFilters[f];
-									return setFilters(newFilters);
-								}
-								// Se elimina el elemento seleccionado mediante el índice
-								newFilters[f].splice(index, 1);
-
-								// Se actualiza el objeto filters
-								setFilters(newFilters);
-							}}
+							onClick={() => deleteChip(f, index)}
 							title={"Remove filter"}
 							label={item}
 						/>
@@ -178,7 +187,7 @@ const MaterialFilterTableView: React.FC<Props> = ({data, cols, fetching}) => {
 					);
 				} */
 			});
-			return [<h4 key='title'>Applied filters:</h4>, ...items];
+			return [<h4 key='key'>Applied filters:</h4>, ...items];
 		}
 		return [];
 	};
