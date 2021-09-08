@@ -1,9 +1,10 @@
 import React, {useEffect, useMemo, useState} from "react";
-import {useTheme} from "@material-ui/core";
+import {Button, useTheme} from "@material-ui/core";
 import {DataGrid, GridColDef, GridColumnHeaderParams} from "@material-ui/data-grid";
 import {Chip, Grid, TextField, Typography, IconButton} from "@material-ui/core";
 import {Autocomplete} from "@material-ui/lab";
 import RemoveCircle from "@material-ui/icons/RemoveCircle";
+import {Link} from "react-router-dom";
 
 import _ from "lodash";
 import useStyles from "./style";
@@ -196,6 +197,13 @@ const MaterialFilterTableView: React.FC<Props> = ({data, cols, fetching}) => {
 
 	return (
 		<Grid container>
+			<Link
+				to={"/videoplayer"}
+				style={{
+					textDecoration: "none",
+				}}>
+				<Button color='primary'>Ir a VideoPlayers</Button>
+			</Link>
 			<Grid item xs={12}>
 				{stringifyFilters.length !== 0 ? (
 					<Grid className={"fade-down"} item xs={12} md={6} lg={6}>
